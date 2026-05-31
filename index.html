@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hours Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <h1>Hours Tracker</h1>
+
+    <div id="periodNav">
+      <button id="prevPeriod">&larr; Prev</button>
+      <span id="periodLabel"></span>
+      <button id="nextPeriod">Next &rarr;</button>
+      <button id="detailsBtn" class="btn">Details</button>
+    </div>
+
+    <div id="summaryBar"></div>
+
+    <div id="calendarGrid"></div>
+  </div>
+
+  <div id="modalOverlay" class="hidden">
+    <div id="modal">
+      <button id="modalClose">&times;</button>
+      <h2 id="modalDate"></h2>
+
+      <div id="liveClock"></div>
+
+      <p id="futureNotice" class="hidden">Can't log hours for future dates.</p>
+
+      <div id="modalActions"></div>
+
+      <div id="modalFields" class="hidden">
+        <div class="field-row">
+          <label>
+            Start Time
+            <span class="time-picker">
+              <select id="startHour" class="time-hour"></select>
+              <span class="time-sep">:</span>
+              <select id="startMinute" class="time-minute"></select>
+              <select id="startAmPm" class="time-ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </span>
+          </label>
+          <label>
+            End Time
+            <span class="time-picker">
+              <select id="endHour" class="time-hour"></select>
+              <span class="time-sep">:</span>
+              <select id="endMinute" class="time-minute"></select>
+              <select id="endAmPm" class="time-ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </span>
+          </label>
+        </div>
+        <div class="field-row">
+          <label>
+            Break Start
+            <span class="time-picker">
+              <select id="breakStartHour" class="time-hour"></select>
+              <span class="time-sep">:</span>
+              <select id="breakStartMinute" class="time-minute"></select>
+              <select id="breakStartAmPm" class="time-ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </span>
+          </label>
+          <label>
+            Break End
+            <span class="time-picker">
+              <select id="breakEndHour" class="time-hour"></select>
+              <span class="time-sep">:</span>
+              <select id="breakEndMinute" class="time-minute"></select>
+              <select id="breakEndAmPm" class="time-ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </span>
+          </label>
+        </div>
+        <div class="field-row">
+          <label>Notes <input type="text" id="notesInput" placeholder="Optional..."></label>
+        </div>
+      </div>
+
+      <div id="hoursDisplay" class="hidden"></div>
+      <p id="clockedInNote" class="hidden"></p>
+
+      <div id="modalFooter">
+        <button id="saveBtn" class="btn btn-primary">Save</button>
+        <button id="deleteBtn" class="btn btn-danger hidden">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="detailsOverlay" class="hidden">
+    <div id="detailsModal">
+      <button id="detailsClose">&times;</button>
+      <h2 id="detailsTitle"></h2>
+      <div id="detailsBody"></div>
+      <div id="detailsFooter">
+        <span id="detailsTotal"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
