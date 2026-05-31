@@ -1,7 +1,8 @@
 # Work Hours Tracker
 
 A simple bi-weekly work hours tracker with a pay period calendar. Clock in/out, track breaks, and see your totals at a glance.
-
+I built this project using AI-assisted development tools. I designed the requirements, tested the functionality, debugged issues, 
+managed version control, and iterated on the features.
 ## Features
 
 - **Pay period calendar** — navigate bi-weekly pay periods anchored to your actual schedule
