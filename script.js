@@ -49,6 +49,7 @@ const detailsClose = document.getElementById("detailsClose")
 const detailsTitle = document.getElementById("detailsTitle")
 const detailsBody = document.getElementById("detailsBody")
 const detailsTotal = document.getElementById("detailsTotal")
+const toastContainer = document.getElementById("toastContainer")
 
 // =========================
 // STORAGE
@@ -150,6 +151,19 @@ function calcHours(start, end, brk, brkStart, brkEnd) {
 function formatHours(dec) {
   const h = Math.floor(dec), m = Math.round((dec - h) * 60)
   return `${h}h ${m}m`
+}
+
+function showToast(msg) {
+  const el = document.createElement("div")
+  el.className = "toast"
+  el.textContent = msg
+  toastContainer.appendChild(el)
+  setTimeout(() => el.remove(), 3000)
+}
+
+function timeStr12(t) {
+  const p = time12ToParts(t)
+  return p.hour + ":" + String(p.minute).padStart(2, "0") + " " + p.ampm
 }
 
 function calcOvertime(days) {
@@ -471,6 +485,7 @@ function clockIn() {
   saveEntries()
   openModal(selectedDate)
   render()
+  showToast("Clocked in at " + timeStr12(t))
 }
 
 function clockOut() {
@@ -485,6 +500,7 @@ function clockOut() {
     saveEntries()
     openModal(selectedDate)
     render()
+    showToast("Clocked out at " + timeStr12(t))
   }
 }
 
@@ -500,6 +516,7 @@ function breakOut() {
   saveEntries()
   openModal(selectedDate)
   render()
+  showToast("Break started at " + timeStr12(t))
 }
 
 function breakIn() {
@@ -514,6 +531,7 @@ function breakIn() {
     saveEntries()
     openModal(selectedDate)
     render()
+    showToast("Break ended at " + timeStr12(t))
   }
 }
 
@@ -558,6 +576,7 @@ function handleSave() {
   saveEntries()
   closeModal()
   render()
+  showToast("Saved")
 }
 
 function handleDelete() {
@@ -567,6 +586,7 @@ function handleDelete() {
   saveEntries()
   closeModal()
   render()
+  showToast("Deleted")
 }
 
 // =========================
@@ -591,8 +611,11 @@ function openDetailsModal() {
 
   let periodTotal = 0
   let loggedDays = 0
+  let weekTotals = [0, 0]
+  let weekLogged = [0, 0]
 
-  for (const day of days) {
+  for (let i = 0; i < days.length; i++) {
+    const day = days[i]
     const ds = toDateStr(day)
     const e = entries[ds]
     const dayName = day.toLocaleDateString("en-US", { weekday: "short" })
@@ -626,6 +649,9 @@ function openDetailsModal() {
       const h = calcHours(e.start, e.end, e.break, e.breakStart, e.breakEnd)
       periodTotal += h
       loggedDays++
+      const wi = i < 7 ? 0 : 1
+      weekTotals[wi] += h
+      weekLogged[wi]++
       hoursDisplayTxt = Math.floor(h) + "h " + Math.round((h - Math.floor(h)) * 60) + "m"
       decimalTxt = h.toFixed(2)
     }
@@ -639,6 +665,19 @@ function openDetailsModal() {
       '<td class="num">' + hoursDisplayTxt + '</td>' +
       '<td class="num">' + decimalTxt + '</td>' +
       '</tr>'
+
+    // Week subtotal rows
+    if (i === 6 || i === 13) {
+      const wi = i === 6 ? 0 : 1
+      const wt = weekTotals[wi]
+      const wl = weekLogged[wi]
+      const ot = Math.max(0, wt - 40)
+      html += '<tr class="week-subtotal">' +
+        '<td colspan="5">Week ' + (wi + 1) + ' subtotal</td>' +
+        '<td class="num">' + Math.floor(wt) + 'h ' + Math.round((wt - Math.floor(wt)) * 60) + 'm</td>' +
+        '<td class="num">' + wt.toFixed(2) + (ot > 0 ? ' <span style="color:#fbbf24">(' + ot.toFixed(2) + ' OT)</span>' : '') + '</td>' +
+        '</tr>'
+    }
   }
 
   html += '</tbody></table>'
